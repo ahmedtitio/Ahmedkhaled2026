@@ -255,11 +255,11 @@ export function SiteProtection() {
       document.removeEventListener('dragstart', preventDrag);
       document.removeEventListener('keydown', preventKeyboardShortcuts);
       clearInterval(devToolsInterval);
-      
+	  
       document.body.style.userSelect = '';
-      document.body.style.webkitUserSelect = '';
-      document.body.style.msUserSelect = '';
-      document.body.style.mozUserSelect = '';
+      document.body.style.removeProperty('-webkit-user-select');
+      document.body.style.removeProperty('-ms-user-select');
+      document.body.style.removeProperty('-moz-user-select');
     };
   }, [t]);
 
