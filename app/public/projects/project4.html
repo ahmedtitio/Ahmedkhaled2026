@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع شركة تعريفي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .cta-button:hover {
+            transform: scale(1.1);
+        }
+        .services {
+            padding: 80px 20px;
+            background: white;
+        }
+        .services h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #333;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-card {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .service-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .about {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            text-align: center;
+        }
+        .about h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .about p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div>
+            <h1>🏢 شركة الابتكار التقني</h1>
+            <p>نحول أفكارك إلى واقع رقمي</p>
+            <button class="cta-button">ابدأ مشروعك</button>
+        </div>
+    </section>
+    
+    <section class="services">
+        <h2>خدماتنا</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3 class="service-title">تطوير المواقع</h3>
+                <p>نصمم ونطور مواقع احترافية بأحدث التقنيات</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3 class="service-title">تطبيقات الجوال</h3>
+                <p>تطبيقات ذكية لنظامي iOS و Android</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3 class="service-title">التصميم الإبداعي</h3>
+                <p>تصميمات عصرية تجذب العملاء</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3 class="service-title">التسويق الرقمي</h3>
+                <p>استراتيجيات فعالة للوصول لجمهورك</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="about">
+        <h2>من نحن</h2>
+        <p>نحن فريق من المحترفين المتخصصين في تقديم حلول تقنية مبتكرة. نؤمن بأن التكنولوجيا هي المفتاح لنجاح الأعمال في العصر الحديث. نعمل بشغف لتحويل رؤى عملائنا إلى واقع رقمي ملموس.</p>
+    </section>
+</body>
+</html>
