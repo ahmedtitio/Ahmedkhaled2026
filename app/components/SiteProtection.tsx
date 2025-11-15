@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 
 export function SiteProtection() {
   const { t } = useLanguage();
@@ -232,10 +232,11 @@ export function SiteProtection() {
     const devToolsInterval = setInterval(detectDevTools, 1000);
 
     // منع تحديد النص عبر CSS
-    document.body.style.userSelect = 'none';
-    document.body.style.webkitUserSelect = 'none';
-    document.body.style.msUserSelect = 'none';
-    document.body.style.mozUserSelect = 'none';
+	document.body.style.userSelect = 'none';
+(document.body.style as any).webkitUserSelect = 'none';
+(document.body.style as any).msUserSelect = 'none';
+(document.body.style as any).mozUserSelect = 'none';
+
 
     // إظهار رسالة ترحيبية بالحماية
     setTimeout(() => {
