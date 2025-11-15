@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion } from 'motion/react';
 import { X, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Project } from '../types';
@@ -12,40 +12,13 @@ interface ProjectViewerProps {
 
 export function ProjectViewer({ project, onClose }: ProjectViewerProps) {
   const { t, language } = useLanguage();
-  const backButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    
-    // إدارة الأحداث الخاصة بزر العودة
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    // ضمان ظهور زر العودة فوق جميع الطبقات
-    const ensureButtonVisibility = () => {
-      if (backButtonRef.current) {
-        backButtonRef.current.style.zIndex = '2147483647'; // أعلى قيمة ممكنة
-        backButtonRef.current.style.position = 'fixed';
-      }
-    };
-
-    // تشغيل عند التحميل الأولي
-    ensureButtonVisibility();
-    
-    // التحقق الدوري لضمان بقاء الزر في المقدمة
-    const visibilityInterval = setInterval(ensureButtonVisibility, 100);
-    
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    
     return () => {
       document.body.style.overflow = 'unset';
-      window.removeEventListener('keydown', handleGlobalKeyDown);
-      clearInterval(visibilityInterval);
     };
-  }, [onClose]);
+  }, []);
 
   // Get the project component dynamically
   const ProjectComponent = ProjectComponents[project.component as keyof typeof ProjectComponents];
@@ -90,50 +63,18 @@ export function ProjectViewer({ project, onClose }: ProjectViewerProps) {
         <div className="flex-1 overflow-auto bg-white">
           {ProjectComponent ? <ProjectComponent /> : <div className="p-8">Project not found</div>}
         </div>
-      </motion.div>
 
-      {/* زر العودة للرئيسية - طبقة عليا جداً */}
-      <motion.button
-        ref={backButtonRef}
-        initial={{ 
-          x: language === 'ar' ? 100 : -100,
-          opacity: 0
-        }}
-        animate={{ 
-          x: 0,
-          opacity: 1,
-          transition: { delay: 0.3 }
-        }}
-        exit={{ 
-          x: language === 'ar' ? 100 : -100,
-          opacity: 0 
-        }}
-        onClick={(e) => {
-          e.stopPropagation(); // منع انتشار الحدث
-          e.preventDefault(); // منع السلوك الافتراضي
-          onClose();
-        }}
-        onPointerDown={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
-        className={`fixed bottom-8 ${language === 'ar' ? 'left-8' : 'right-8'} 
-          p-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 
-          text-white shadow-2xl hover:shadow-3xl transition-all flex items-center gap-2
-          z-[2147483647]`} // أعلى قيمة ممكنة لـ z-index
-        aria-label={t('العودة للرئيسية', 'Back to Home')}
-        style={{
-          willChange: 'transform, opacity',
-          touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'transparent',
-          pointerEvents: 'auto !important',
-          userSelect: 'none'
-        }}
-      >
-        <ArrowLeft className={`w-5 h-5 ${language === 'ar' ? 'rotate-180' : ''}`} />
-        <span className="font-medium whitespace-nowrap">
-          {t('العودة للرئيسية', 'Back to Home')}
-        </span>
-      </motion.button>
+        {/* Floating Back Button */}
+        <motion.button
+          initial={{ x: language === 'ar' ? 100 : -100 }}
+          animate={{ x: 0 }}
+          onClick={onClose}
+          className={`fixed bottom-8 ${language === 'ar' ? 'left-8' : 'right-8'} p-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-2xl hover:shadow-3xl transition-all flex items-center gap-2 z-10`}
+        >
+          <ArrowLeft className={`w-5 h-5 ${language === 'ar' ? 'rotate-180' : ''}`} />
+          <span>{t('العودة للرئيسية', 'Back to Home')}</span>
+        </motion.button>
+      </motion.div>
     </motion.div>
   );
 }
