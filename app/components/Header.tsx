@@ -40,7 +40,7 @@ export function Header() {
 
           {/* Controls */}
           <div className="flex items-center gap-3">
-            {/* Theme Toggle*/}
+            {/* Theme Toggle
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -53,7 +53,7 @@ export function Header() {
               ) : (
                 <Moon className="w-5 h-5 text-blue-600" />
               )}
-            </motion.button> 
+            </motion.button> */}
 
             {/* Language Toggle */}
             <motion.button
