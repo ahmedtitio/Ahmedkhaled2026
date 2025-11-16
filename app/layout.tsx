@@ -31,7 +31,7 @@ const cairo = Cairo({
  * تخصيص: عدّل هذه القيم قبل النشر
  * ---------------------------
  */
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ahmedkhaled-me.vercel.app";
 const SITE_NAME = "Ahmed Khaled";
 const DEFAULT_TITLE = "Ahmed Khaled — Web Developer";
 const DEFAULT_DESCRIPTION =
