@@ -1,0 +1,106 @@
+// Prisma schema - قاعدة البيانات الآلية للمشروع
+// يمكن التبديل إلى MySQL/PostgreSQL بتغيير provider و DATABASE_URL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ====== المستخدمون (لوحة الأدمن) ======
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  username  String    @unique
+  password  String // bcrypt hash
+  role      String    @default("ADMIN") // ADMIN | EDITOR
+  name      String?
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// ====== المشاريع ======
+model Project {
+  id            Int      @id @default(autoincrement())
+  titleAr       String
+  titleEn       String
+  descriptionAr String
+  descriptionEn String
+  image         String
+  component     String   @default("")
+  demoUrl       String?
+  liveUrl       String?
+  repoUrl       String?
+  technologies  String // JSON array as string (sqlite لا يدعم المصفوفات)
+  order         Int      @default(0)
+  featured      Boolean  @default(false)
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ====== المهارات ======
+model Skill {
+  id        Int      @id @default(autoincrement())
+  name      String
+  percentage Int     @default(50)
+  icon      String   @default("code")
+  category  String // frontend | backend | tools | design
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ====== إعدادات الموقع العامة ======
+model SiteSetting {
+  key       String   @id // مثل: siteTitle, whatsappNumber, heroTitleAr ...
+  value     String
+  type      String   @default("string") // string | number | boolean | json
+  updatedAt DateTime @updatedAt
+}
+
+// ====== رسائل التواصل ======
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  read      Boolean  @default(false)
+  archived  Boolean  @default(false)
+  ip        String?
+  createdAt DateTime @default(now())
+}
+
+// ====== سجل الزيارات / التحليلات ======
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  userAgent String?
+  ip        String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+}
+
+// ====== سجل النشاطات (Audit Log) ======
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String // CREATE | UPDATE | DELETE | LOGIN | LOGOUT
+  entity    String // Project | Skill | User | Setting ...
+  entityId  String?
+  details   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
