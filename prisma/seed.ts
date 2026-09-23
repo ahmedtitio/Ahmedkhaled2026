@@ -4,6 +4,8 @@
  */
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+// تحميل .env يدويًا لأن tsx لا يحمّله تلقائيًا (يسبب خطأ: Environment variable not found: DATABASE_URL)
+try { require('dotenv').config({ path: new URL('../.env', import.meta.url).pathname }); } catch {}
 
 const prisma = new PrismaClient();
 

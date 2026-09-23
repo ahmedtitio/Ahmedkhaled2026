@@ -2,7 +2,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import prisma from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-change-me';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-fallback-secret-2026-stable';
 export const AUTH_COOKIE = 'portfolio_admin_token';
 
 export interface TokenPayload {

@@ -47,8 +47,16 @@ export async function POST(req: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
     });
     return res;
-  } catch (e) {
+  } catch (e: any) {
     console.error('login error', e);
-    return NextResponse.json({ error: 'حدث خطأ في الخادم' }, { status: 500 });
+    const msg = String(e?.message || '');
+    // تشخيصات واضحة بدل "خطأ خادم" غامض — تساعد في تحديد السبب فورًا
+    if (msg.includes('PrismaClientInitializationError') || msg.includes('connect') || msg.includes('database')) {
+      return NextResponse.json({ error: 'تعذر الاتصال بقاعدة البيانات — تأكد من تشغيل npm run db:migrate وأن DATABASE_URL صحيح' }, { status: 500 });
+    }
+    if (msg.includes('no such table')) {
+      return NextResponse.json({ error: 'الجداول غير موجودة في قاعدة البيانات — شغّل: npx prisma migrate deploy ثم npm run db:seed' }, { status: 500 });
+    }
+    return NextResponse.json({ error: `حدث خطأ في الخادم (${msg.slice(0, 120) || 'unknown'})` }, { status: 500 });
   }
 }
