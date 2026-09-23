@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { projects } from '../data/projects';
+import { useSiteData } from '../contexts/SiteDataContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 import { ProjectViewer } from './ProjectViewer';
@@ -14,9 +14,13 @@ interface ProjectsSectionProps {
 
 export function ProjectsSection({ onViewAll }: ProjectsSectionProps) {
   const { t, language } = useLanguage();
+  const { projects } = useSiteData();
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
-  const displayedProjects = projects.slice(0, MAX_PROJECTS_TO_SHOW);
+  const featured = projects.filter(p => (p as unknown as { featured?: boolean }).featured);
+  const rest = projects.filter(p => !(p as unknown as { featured?: boolean }).featured);
+  const orderedProjects = [...featured, ...rest];
+  const displayedProjects = orderedProjects.slice(0, MAX_PROJECTS_TO_SHOW);
   const hasMoreProjects = projects.length > MAX_PROJECTS_TO_SHOW;
 
   return (

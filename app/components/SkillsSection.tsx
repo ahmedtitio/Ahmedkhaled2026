@@ -1,10 +1,10 @@
 import { useLanguage } from '../contexts/LanguageContext';
-import { skills } from '../data/skills';
+import { useSiteData } from '../contexts/SiteDataContext';
 import { motion } from 'motion/react';
 import { Code, Server, Wrench, Palette } from 'lucide-react';
-
 export function SkillsSection() {
   const { t } = useLanguage();
+  const { skills } = useSiteData();
 
   const categories = {
     frontend: { icon: Code, label: { ar: 'تطوير الواجهات', en: 'Frontend' }, color: 'from-blue-500 to-cyan-500' },

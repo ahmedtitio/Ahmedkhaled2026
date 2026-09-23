@@ -1,50 +1,56 @@
-"use client";
-import { useState } from 'react';
-import { LanguageProvider } from './contexts/LanguageContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { Header } from './components/Header';
-import { HeroSection } from './components/HeroSection';
-import { SkillsSection } from './components/SkillsSection';
-import { ProjectsSection } from './components/ProjectsSection';
-import { SocialSection } from './components/SocialSection';
-import { Footer } from './components/Footer';
-import { WhatsAppButton } from './components/WhatsAppButton';
-import { AllProjectsPage } from './components/AllProjectsPage';
-import { SiteProtection } from './components/SiteProtection';
-import { Toaster } from './components/ui/sonner';
+import { Suspense } from 'react';
+import HomeShell from './HomeShell';
 
-export default function App() {
-  const [showAllProjects, setShowAllProjects] = useState(false);
+export const dynamic = 'force-dynamic';
 
-  if (showAllProjects) {
-    return (
-      <ThemeProvider>
-        <LanguageProvider>
-          <SiteProtection />
-          <AllProjectsPage onClose={() => setShowAllProjects(false)} />
-          <Toaster position="top-center" richColors />
-        </LanguageProvider>
-      </ThemeProvider>
-    );
+/**
+ * الصفحة الرئيسية — تجلب البيانات من قاعدة البيانات (Prisma)
+ * وتمررها للواجهة التي كانت تعتمد سابقًا على ملفات ثابتة في app/data.
+ */
+export default async function HomePage() {
+  let projects: unknown[] = [];
+  let skills: unknown[] = [];
+  let settings: Record<string, string> = {};
+
+  try {
+    // استيراد ديناميكي حتى لا ينكسر البناء إذا لم تكن قاعدة البيانات مُهيأة بعد
+    const { prisma } = await import('@/lib/prisma');
+
+    const [dbProjects, dbSkills, dbSettings] = await Promise.all([
+      prisma.project.findMany({ where: { published: true }, orderBy: { order: 'asc' } }),
+      prisma.skill.findMany({ where: { published: true }, orderBy: { order: 'asc' } }),
+      prisma.siteSetting.findMany(),
+    ]);
+
+    projects = dbProjects.map((p) => ({
+      id: p.id,
+      title: { ar: p.titleAr, en: p.titleEn },
+      description: { ar: p.descriptionAr, en: p.descriptionEn },
+      image: p.image,
+      component: p.component,
+      technologies: (() => { try { return JSON.parse(p.technologies); } catch { return []; } })(),
+    }));
+
+    skills = dbSkills.map((s) => ({
+      name: s.name,
+      percentage: s.percentage,
+      icon: s.icon,
+      category: s.category,
+    }));
+
+    for (const s of dbSettings) settings[s.key] = s.value;
+  } catch (e) {
+    // fallback إلى الملفات الثابتة إذا تعذر الوصول لقاعدة البيانات
+    const staticProjects = await import('./data/projects');
+    const staticSkills = await import('./data/skills');
+    projects = staticProjects.projects;
+    skills = staticSkills.skills;
+    console.error('DB unavailable, fell back to static data:', e);
   }
 
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <SiteProtection />
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black transition-colors duration-300">
-          <Header />
-          <main>
-            <HeroSection />
-            <SkillsSection />
-            <ProjectsSection onViewAll={() => setShowAllProjects(true)} />
-            <SocialSection />
-          </main>
-          <Footer />
-          <WhatsAppButton />
-        </div>
-        <Toaster position="top-center" richColors />
-      </LanguageProvider>
-    </ThemeProvider>
+    <Suspense fallback={<div className="min-h-screen bg-gray-900" />}>
+      <HomeShell projects={projects as never} skills={skills as never} settings={settings} />
+    </Suspense>
   );
 }

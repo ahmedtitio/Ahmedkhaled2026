@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { projects } from '../data/projects';
+import { useSiteData } from '../contexts/SiteDataContext';
 import { motion } from 'motion/react';
 import { ArrowLeft, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ProjectViewer } from './ProjectViewer';
@@ -17,6 +17,7 @@ const PROJECTS_PER_PAGE = 15;
 
 export function AllProjectsPage({ onClose }: AllProjectsPageProps) {
   const { t, language } = useLanguage();
+  const { projects } = useSiteData();
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
