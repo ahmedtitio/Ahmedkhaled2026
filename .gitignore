@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+.env
+*.db
+prisma/*.db
+build/
+.vercel/
+
+tsconfig.tsbuildinfo

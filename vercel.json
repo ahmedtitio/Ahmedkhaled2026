@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "app/api/**/route.ts": {
+      "maxDuration": 30
+    },
+    "app/**/page.tsx": {
+      "maxDuration": 30
+    }
+  }
+}
