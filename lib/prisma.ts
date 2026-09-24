@@ -43,10 +43,11 @@ function createClient(): PrismaClient {
     ensureTmpDb(file);
     // التأكد أن الدليل الأب موجود (يحل Error code 14: Unable to open the database file)
     try { fs.mkdirSync(path.dirname(path.resolve(file)), { recursive: true }); } catch { /* ignore */ }
-    // PrismaBetterSqlite3 (v7) يعمل مع @prisma/client v6 عبر واجهة driver-adapter المستقرة.
-    // بديل موثوق لـ adapter-libsql الذي يفشل بـ "Error code 14" مع Prisma 6.19.3.
-    const { PrismaBetterSqlite3 } = nodeRequire('@prisma/adapter-better-sqlite3');
-    return new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: 'file:' + file }) } as any);
+    // adapter-libsql: مكتبة JS نقية (prebuilt WASM/native عبر @libsql/client) —
+    // لا تعتمد على الحزمة الخارجية "bindings" التي تفشل على Vercel بخطأ:
+    // Cannot find module 'bindings' (كانت تحدث مع better-sqlite3).
+    const { PrismaLibSQL } = nodeRequire('@prisma/adapter-libsql');
+    return new PrismaClient({ adapter: new PrismaLibSQL({ url: 'file:' + file }) } as any);
   }
   // PostgreSQL / MySQL — يتصل Prisma مباشرة عبر DATABASE_URL
   return new PrismaClient({ datasources: { db: { url } } });

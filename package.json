@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",
-    "@prisma/adapter-better-sqlite3": "^7.10.0",
     "@prisma/adapter-libsql": "^6.19.3",
     "@prisma/client": "^6.19.3",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -23,7 +22,6 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.11.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
